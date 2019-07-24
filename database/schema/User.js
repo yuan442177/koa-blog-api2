@@ -7,13 +7,16 @@ let ObjectId = Schema.Types.ObjectId    //声明Object类型
 const bcrypt = require('bcrypt')
 const SALT_WORK_FACTOR = 10
 
-//创建我们的用户Schema
+//创建用户Schema
 const userSchema = new Schema({
-    UserId:ObjectId,
-    userName:{unique:true,type:String},
-    password:String,
-    createAt:{type:Date,default:Date.now()},
-    lastLoginAt:{type:Date,default:Date.now()}
+    UserId:ObjectId,//用户id
+    userName:{unique:true,type:String},//用户名
+    password:String,//密码
+    createAt:{type:Date,default:Date.now()},//创建时间
+    lastLoginAt:{type:Date,default:Date.now()},//最后登录时间
+    email:String,//电子邮箱
+    level:Number,//级别
+    isDelete:Boolean,//是否删除
 },{
     collection:'user'
 })

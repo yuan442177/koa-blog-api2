@@ -1,5 +1,10 @@
 const Router = require ('koa-router')
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
+const jwtKoa = require('koa-jwt')
+const secret = 'koa-api'
+const util = require('util')
+const verify = util.promisify(jwt.verify) // 解密
 
 module.exports={
     /**
@@ -53,8 +58,10 @@ module.exports={
                 let newUser = new User()  //因为是实例方法，所以要new出对象，才能调用
                 await newUser.comparePassword(password,result.password)
                 .then( (isMatch)=>{
+
+                    const token = jwt.sign({_name:loginUser.userName},secret, {expiresIn: '2h'}) 
                     //返回比对结果
-                    ctx.body={ code:200, message:isMatch} 
+                    ctx.body={ code:200, message:isMatch,token} 
                 })
                 .catch(error=>{
                     //出现异常，返回异常
@@ -104,5 +111,38 @@ module.exports={
             console.log(error)
             ctx.body={ code:500, message:error  }
         })
+    },
+    /**
+     * 用户中心
+     */
+    async userInfo(ctx){
+        console.log('用户中心')
+        const token = ctx.header.authorization
+        let payload
+        if (token) {
+                console.log(token)
+                //引入User的model
+                const User = mongoose.model('User')
+                payload = await verify(token.split(' ')[1], secret)// // 解密，获取payload
+                await User.findOne({userName:payload._name}).exec().then(async(result)=>{
+                console.log(result)
+                ctx.body = {
+                    code:200,
+                    userInfo:result
+                }
+            }).catch(error=>{
+                ctx.body = {
+                    code:500,
+                    message:error
+                }
+            })
+        }
+         else {
+            ctx.body = {
+                message: 'token 错误',
+                code: -1
+            }
+        }
+         
     }
 }
