@@ -5,11 +5,11 @@ const upUtil  = require('../src/util')
 let article = require('../src/Article')
 
 //router.use('/user', user.routes(), user.allowedMethods())
-router.post('/register', user.register)//用户=注册
+router.post('/register', user.register)//用户注册
 router.post('/login', user.login)//用户登录
 router.del('/deleteUser', user.delete)//删除用户
 router.post('/userInfo', user.userInfo)//用户信息  
-router.post('/upuserinfo', user.upuserinfo)//用户信息  
+router.post('/upuserinfo', user.upuserinfo)//更新用户信息（暂时只能更新密码）
 /**
  * 上传图片
  */
