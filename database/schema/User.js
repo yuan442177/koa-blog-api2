@@ -10,13 +10,14 @@ const SALT_WORK_FACTOR = 10
 //创建用户Schema
 const userSchema = new Schema({
     UserId:ObjectId,//用户id
-    userName:{unique:true,type:String},//用户名
-    password:String,//密码
+    userName:{unique:true,type:String,maxlength:24,minlength:6},//用户名
+    password:{type:String,maxlength:16,minlength:6},//密码
     createAt:{type:Date,default:Date.now()},//创建时间
     lastLoginAt:{type:Date,default:Date.now()},//最后登录时间
     email:String,//电子邮箱
-    level:Number,//级别
+    level:{type:Number,max:9,min:1},//级别
     isDelete:Boolean,//是否删除
+    Nickname:{type:String,maxlength:24,minlength:6}//昵称
 },{
     collection:'user'
 })

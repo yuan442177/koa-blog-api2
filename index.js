@@ -8,13 +8,38 @@ const cors = require('koa2-cors')
 const routes = require('./routes/index')
 const jwtKoa = require('koa-jwt')
 const secret = 'koa-api'
+const convert = require('koa-convert');
+const static = require('koa-static') 
+const path = require('path') 
+const fs = require('fs')
+const formidable = require('formidable')
 
+//跨域
 app.use(cors())
 
+// post body 解析
 app.use(bodyParser())
 
 
-// 错误处理
+// 配置静态资源加载中间件
+app.use(static(__dirname , 'public'));
+
+
+// 静态文件服务，针对 html js css fonts 文件
+const staticCache = require('koa-static-cache')
+function setStaticCache() {
+    const exampleDir = path.join(__dirname, '..', '..', 'example')
+    const releaseDir = path.join(__dirname, '..', '..', 'release')
+    app.use(staticCache(exampleDir))
+    app.use(staticCache(releaseDir))
+}
+setStaticCache()
+
+
+
+
+
+// // 错误处理
 app.use((ctx, next) => {
     return next().catch((err) => {
         if(err.status === 401){
@@ -33,6 +58,12 @@ app.use(jwtKoa({secret: secret}).unless({
         path: [
             /^\/login/,
             /^\/register/,
+            /^\/public/,
+            /^\/up/,
+            /^\/writeArticle/,
+            /^\/getArticlelist/,
+            /^\/upuserinfo/
+            // /^\/userInfo/
             // /^\/userCenter/
         ] //数组中的路径不需要通过jwt验证
 }))
