@@ -62,7 +62,9 @@ app.use(jwtKoa({secret: secret}).unless({
             /^\/up/,
             /^\/writeArticle/,
             /^\/getArticlelist/,
-            /^\/upuserinfo/
+            /^\/upuserinfo/,
+            /^\/addCategory/,
+            /^\/getCategorylist/
             // /^\/userInfo/
             // /^\/userCenter/
         ] //数组中的路径不需要通过jwt验证

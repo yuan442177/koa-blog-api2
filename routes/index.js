@@ -3,6 +3,7 @@ const formidable = require('formidable')
 let user = require('../src/User')
 const upUtil  = require('../src/util')
 let article = require('../src/Article')
+let category = require('../src/Category')
 
 //router.use('/user', user.routes(), user.allowedMethods())
 router.post('/register', user.register)//用户注册
@@ -40,5 +41,8 @@ router.post('/upimgs', upUtil.upload.array('mypic',5),async (ctx, next) => {
 
 router.post('/writeArticle', article.writeArticle)//文章写入接口  
 router.post('/getArticlelist', article.getArticlelist)//获取文章列表
+
+router.post('/addCategory', category.addCategory)//新建栏目 
+router.post('/getCategorylist', category.getCategorylist)//获取栏目
 
 module.exports = router
